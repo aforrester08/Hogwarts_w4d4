@@ -14,14 +14,29 @@ class Student
 
 
   def save()
-    sql = "INSERT INTO hogwarts
+    sql = "INSERT INTO students
     (first_name, last_name, age, house)
     VALUES
     ($1, $2, $3, $4)
     RETURNING *"
     values = [@first_name, @last_name, @age, @house]
     student_data = SqlRunner.run(sql, values)
-    @id = student_date[0]['id'].to_i()
+    @id = student_data[0]['id'].to_i()
+  end
+
+  def self.all()
+    sql = "SELECT * FROM students"
+    students = SqlRunner.run(sql)
+    results = students.map { |student| Student.new(student) }
+    return results
+  end
+
+  def self.find(id)
+    sql = "SELECT * FROM students WHERE id = $1"
+    values = [id]
+    student = SqlRunner.run(sql, values)
+    result = Student.new(student.first)
+    return result
   end
 
 end
