@@ -24,6 +24,10 @@ class Student
     @id = student_data[0]['id'].to_i()
   end
 
+    def full_name()
+      return "#{@first_name} #{@last_name}"
+    end
+
   def self.all()
     sql = "SELECT * FROM students"
     students = SqlRunner.run(sql)
@@ -37,6 +41,11 @@ class Student
     student = SqlRunner.run(sql, values)
     result = Student.new(student.first)
     return result
+  end
+
+  def self.delete_all()
+    sql = "DELETE FROM students"
+    SqlRunner.run(sql)
   end
 
 end
